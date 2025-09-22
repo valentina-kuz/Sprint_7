@@ -4,6 +4,7 @@
 import requests
 import json
 from typing import Dict, Any, Optional
+from config.urls import URLs
 from config.settings import Config
 
 
@@ -11,7 +12,7 @@ class APIClient:
     """Базовый клиент для работы с API Яндекс Самокат"""
     
     def __init__(self):
-        self.base_url = Config.BASE_URL
+        self.base_url = URLs.BASE_URL
         self.timeout = Config.REQUEST_TIMEOUT
         self.default_headers = Config.DEFAULT_HEADERS.copy()
     

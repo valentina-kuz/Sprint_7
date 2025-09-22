@@ -3,6 +3,7 @@ API методы для работы с заказами
 """
 from typing import Dict, Any, Optional
 from .api_client import APIClient
+from config.urls import URLs
 from config.settings import Config
 
 
@@ -20,14 +21,13 @@ class OrderAPI(APIClient):
             Словарь с результатом запроса
         """
         response = self.post(
-            endpoint=Config.ENDPOINTS['CREATE_ORDER'],
+            endpoint=URLs.ENDPOINTS['CREATE_ORDER'],
             data=order_data,
             headers={'Content-Type': 'application/json'}
         )
         
         result = self._parse_response(response)
         
-        # Добавляем track номер при успешном создании
         if response.status_code == 201 and response.text:
             try:
                 json_data = response.json()
@@ -44,11 +44,10 @@ class OrderAPI(APIClient):
         Returns:
             Словарь с результатом запроса
         """
-        response = self.get(endpoint=Config.ENDPOINTS['GET_ORDERS_LIST'])
+        response = self.get(endpoint=URLs.ENDPOINTS['GET_ORDERS_LIST'])
         
         result = self._parse_response(response)
         
-        # Добавляем список заказов при успешном запросе
         if response.status_code == 200 and response.text:
             try:
                 json_data = response.json()
@@ -70,13 +69,12 @@ class OrderAPI(APIClient):
         """
         params = {'t': track_number}
         response = self.get(
-            endpoint=Config.ENDPOINTS['GET_ORDER_BY_TRACK'],
+            endpoint=URLs.ENDPOINTS['GET_ORDER_BY_TRACK'],
             params=params
         )
         
         result = self._parse_response(response)
         
-        # Добавляем объект заказа при успешном запросе
         if response.status_code == 200 and response.text:
             try:
                 json_data = response.json()
@@ -97,7 +95,7 @@ class OrderAPI(APIClient):
         Returns:
             Словарь с результатом запроса
         """
-        endpoint = f"{Config.ENDPOINTS['ACCEPT_ORDER']}{order_id}"
+        endpoint = f"{URLs.ENDPOINTS['ACCEPT_ORDER']}{order_id}"
         params = {'courierId': courier_id}
         
         response = self.put(endpoint=endpoint, params=params)
@@ -116,7 +114,7 @@ class OrderAPI(APIClient):
         """
         params = {'track': track_number}
         response = self.put(
-            endpoint=Config.ENDPOINTS['CANCEL_ORDER'],
+            endpoint=URLs.ENDPOINTS['CANCEL_ORDER'],
             params=params
         )
         

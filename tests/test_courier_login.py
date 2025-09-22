@@ -5,6 +5,7 @@ import pytest
 import allure
 from config.settings import Config
 from data.test_data import CourierTestData, ResponseMessages
+from helpers.data_generator import DataGenerator
 
 
 @allure.epic("Курьеры")
@@ -33,8 +34,11 @@ class TestCourierLogin:
     @allure.title("Нельзя войти без обязательных полей")
     @allure.description("Проверяем, что авторизация без обязательных полей возвращает ошибку 400")
     @allure.severity(allure.severity_level.NORMAL)
-    def test_courier_login_without_required_fields_fails(self, courier_api, data_generator):
+    def test_courier_login_without_required_fields_fails(self, courier_api):
         """Тест авторизации без обязательных полей"""
+        
+        # Создаем генератор данных
+        data_generator = DataGenerator()
         
         # Тестируем с пустым логином
         with allure.step("Тестируем авторизацию с пустым логином"):
@@ -68,8 +72,11 @@ class TestCourierLogin:
     @allure.title("Ошибка при авторизации несуществующего пользователя")
     @allure.description("Проверяем, что авторизация несуществующего пользователя возвращает ошибку 404")
     @allure.severity(allure.severity_level.NORMAL)
-    def test_courier_login_nonexistent_user_fails(self, courier_api, data_generator):
+    def test_courier_login_nonexistent_user_fails(self, courier_api):
         """Тест авторизации несуществующего пользователя"""
+        
+        # Создаем генератор данных
+        data_generator = DataGenerator()
         
         with allure.step("Пытаемся войти под несуществующим пользователем"):
             # Генерируем заведомо несуществующие данные

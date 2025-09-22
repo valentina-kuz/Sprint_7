@@ -62,20 +62,6 @@ class CourierTestData:
     }
 
 
-class OrderTestData:
-    """Тестовые данные для заказов"""
-    
-    # Варианты цветов для параметризации
-    COLOR_OPTIONS = [
-        {"color": ["BLACK"], "description": "только черный"},
-        {"color": ["GREY"], "description": "только серый"},
-        {"color": ["BLACK", "GREY"], "description": "черный и серый"},
-        {"color": [], "description": "без цвета"},
-        {}, # Вариант без поля color вообще
-    ]
-    
-
-
 class ResponseMessages:
     """Ожидаемые сообщения в ответах API"""
 

@@ -5,6 +5,7 @@ import pytest
 import allure
 from config.settings import Config
 from data.test_data import ResponseMessages
+from helpers.data_generator import DataGenerator
 
 
 @allure.epic("Курьеры")
@@ -15,16 +16,10 @@ class TestCourierDelete:
     @allure.title("Успешное удаление курьера возвращает ok:true")
     @allure.description("Проверяем, что при успешном удалении курьера возвращается ok:true")
     @allure.severity(allure.severity_level.CRITICAL)
-    def test_delete_courier_success(self, courier_api, data_generator):
+    def test_delete_courier_success(self, courier_for_deletion_test, courier_api):
         """Тест успешного удаления курьера"""
         
-        # Создаем курьера для удаления
-        courier_data = data_generator.generate_courier_data()
-        
-        with allure.step("Создаем курьера для удаления"):
-            create_result = courier_api.create_and_login_courier(courier_data)
-            assert create_result['success'] is True, "Курьер должен быть создан для теста"
-            courier_id = create_result['courier_id']
+        courier_id = courier_for_deletion_test['courier_id']
         
         with allure.step("Удаляем курьера"):
             allure.attach(str(courier_id), "ID курьера для удаления", allure.attachment_type.TEXT)
@@ -43,11 +38,9 @@ class TestCourierDelete:
         """Тест удаления курьера без ID"""
         
         with allure.step("Отправляем запрос на удаление курьера без ID"):
-            # Передаем пустую строку как ID
             result = courier_api.delete_courier("")
         
         with allure.step("Проверяем ошибку валидации"):
-            # API возвращает 404 для пустого ID
             assert result['status_code'] == Config.STATUS_CODES['NOT_FOUND'], \
                 f"Ожидался код {Config.STATUS_CODES['NOT_FOUND']}, получен {result['status_code']}"
     

@@ -3,6 +3,7 @@ API методы для работы с курьерами
 """
 from typing import Dict, Any, Optional
 from .api_client import APIClient
+from config.urls import URLs
 from config.settings import Config
 
 
@@ -20,7 +21,7 @@ class CourierAPI(APIClient):
             Словарь с результатом запроса
         """
         response = self.post(
-            endpoint=Config.ENDPOINTS['CREATE_COURIER'],
+            endpoint=URLs.ENDPOINTS['CREATE_COURIER'],
             data=courier_data,
             headers={'Content-Type': 'application/json'}
         )
@@ -38,14 +39,13 @@ class CourierAPI(APIClient):
             Словарь с результатом запроса включая ID курьера
         """
         response = self.post(
-            endpoint=Config.ENDPOINTS['LOGIN_COURIER'],
+            endpoint=URLs.ENDPOINTS['LOGIN_COURIER'],
             data=login_data,
             headers={'Content-Type': 'application/json'}
         )
         
         result = self._parse_response(response)
         
-        # Добавляем ID курьера при успешном логине
         if response.status_code == 200 and response.text:
             try:
                 json_data = response.json()
@@ -65,7 +65,7 @@ class CourierAPI(APIClient):
         Returns:
             Словарь с результатом запроса
         """
-        endpoint = f"{Config.ENDPOINTS['DELETE_COURIER']}{courier_id}"
+        endpoint = f"{URLs.ENDPOINTS['DELETE_COURIER']}{courier_id}"
         response = self.delete(endpoint=endpoint)
         
         return self._parse_response(response)
